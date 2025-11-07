@@ -40,7 +40,7 @@ class listSach {
     void inSachDaTimTen(string tensach);
     nodeSach* getHead();
 };
-//------------------ Cai dac ham ------------------
+//------------------ Cai dac ham list Sach--------------------------------------
 listSach::listSach() {
     head = NULL;
     tail = NULL;
@@ -105,20 +105,21 @@ void listSach::indssach() {
         cout << "Danh sach rong!" << endl;
         return;
     }
-    cout << "\n===== DANH SACH SACH =====" << endl;
-    cout << left << setw(10) << "STT" << setw(15) << "Ma sach" << setw(30) << "Ten sach" << setw(25)
+    cout << string(38, '=') << "DANH SACH SACH" << string(38, '=') << endl;
+    cout << left << setw(5) << "STT" << setw(12) << "Ma sach" << setw(35) << "Ten sach" << setw(25)
          << "Tac gia" << setw(10) << "So luong" << endl;
     cout << string(90, '-') << endl;
     int i = 1;
     for (nodeSach* p = head; p != NULL; p = p->next) {
-        cout << left << setw(10) << i++ << setw(15) << p->data.masach << setw(30) << p->data.tensach
+        cout << left << setw(5) << i++ << setw(12) << p->data.masach << setw(35) << p->data.tensach
              << setw(25) << p->data.tacgia << setw(10) << p->data.soluong << endl;
     }
 }
 nodeSach* listSach::timSachTheoMa(string ma) {
     nodeSach* p = head;
     while (p != NULL) {
-        if (p->data.masach == ma) return p;
+        if (p->data.masach == ma)
+            return p;
         p = p->next;
     }
     return NULL;
@@ -126,7 +127,8 @@ nodeSach* listSach::timSachTheoMa(string ma) {
 nodeSach* listSach::timSachTheoTen(string ten) {
     nodeSach* p = head;
     while (p != NULL) {
-        if (p->data.tensach == ten) return p;
+        if (p->data.tensach == ten)
+            return p;
         p = p->next;
     }
     return NULL;
@@ -148,8 +150,8 @@ void listSach::inSachDaTimID(string masach) {
         cout << "Khong tim thay sach.";
     }
     cout << "Tim thay sach :";
-    cout << "Masach:" << p->data.masach << " -Ten:" << p->data.tensach
-         << " -Docgia:" << p->data.tacgia << " -SoLuong:" << p->data.soluong;
+    cout << "Masach:" << p->data.masach << " -Ten:" << p->data.tensach << " -Docgia:"
+         << p->data.tacgia << " -SoLuong:" << p->data.soluong;
 }
 void listSach::inSachDaTimTen(string ten) {
     nodeSach* p = timSachTheoTen(ten);
@@ -160,7 +162,7 @@ void listSach::inSachDaTimTen(string ten) {
     cout << "Masach:" << p->data.masach << " -Ten:" << p->data.tensach
          << " -Docgia:" << p->data.tacgia << " -SoLuong:" << p->data.soluong;
 }
-//===================== Doc Gia==========================================
+//===================== Doc Gia=================================================
 struct docGia {
     string madg;
     string ten;
@@ -189,6 +191,7 @@ class listDg {
     void in1DG(string madg);
     void capnhattt(string madg, string ten, int tuoi, string gioitinh);
 };
+//------------------ Cai dac ham doc gia--------------------------------------
 listDg ::listDg() {
     head = NULL;
     tail = NULL;
@@ -214,7 +217,8 @@ void listDg::themcuoi(docGia x) {
 nodeDg* listDg::timtheoID(string id) {
     nodeDg* p = head;
     while (p != NULL) {
-        if (p->data.madg == id) return p;
+        if (p->data.madg == id)
+            return p;
         p = p->next;
     }
     return NULL;
@@ -263,14 +267,12 @@ void listDg::inDsdg() {
         printf("Danh sach rong!\n");
         return;
     }
-    cout << "\n=================================================================="
-            "==========\n";
+    cout << "\n============================================================================\n";
     cout << "| " << left << setw(8) << "ID";
     cout << "| " << left << setw(30) << "HO VA TEN";
     cout << "| " << left << setw(7) << "TUOI";
     cout << "| " << left << setw(20) << "GIOI TINH" << setw(3) << " |";
-    cout << "\n------------------------------------------------------------------"
-            "---------\n";
+    cout << "\n---------------------------------------------------------------------------\n";
     for (nodeDg* p = head; p != NULL; p = p->next) {
         cout << "| " << left << setw(8) << p->data.madg;
         cout << "| " << left << setw(30) << p->data.ten;
@@ -278,29 +280,24 @@ void listDg::inDsdg() {
         cout << "| " << left << setw(20) << p->data.gioitinh << setw(3) << " |";
         cout << endl;
     }
-    cout << "===================================================================="
-            "========\n";
+    cout << "============================================================================\n";
 }
 void listDg::in1DG(string ma) {
     nodeDg* p = timtheoID(ma);
-    cout << "\n=================================================================="
-            "=========\n";
+    cout << "\n===========================================================================\n";
     cout << "| " << left << setw(8) << "ID";
     cout << "| " << left << setw(30) << "HO VA TEN";
     cout << "| " << left << setw(7) << "TUOI";
     cout << "| " << left << setw(20) << "GIOI TINH" << setw(3) << " |";
-    cout << "\n------------------------------------------------------------------"
-            "---------\n";
+    cout << "\n---------------------------------------------------------------------------\n";
     cout << "| " << left << setw(8) << p->data.madg;
     cout << "| " << left << setw(30) << p->data.ten;
     cout << "| " << left << setw(7) << p->data.tuoi;
     cout << "| " << left << setw(20) << p->data.gioitinh << setw(3) << " |";
     cout << endl;
-    cout << "===================================================================="
-            "========\n";
+    cout << "============================================================================\n";
 }
-//=================Muon tra sach
-//=======================================================
+//=================Muon tra sach=======================================================
 struct muontra {
     string madg;
     string masach;
@@ -362,7 +359,8 @@ void listMuontra::muonSach(string madg, nodeSach* a) {
 }
 void listMuontra::traSach(string madg, nodeSach* a) {
     for (auto& x : dsmt) {
-        if (x.madg == madg && x.masach == a->data.masach && x.trangthai == "Dang muon") {
+        if (x.madg == madg && x.masach == a->data.masach &&
+            x.trangthai == "Dang muon") {
             x.trangthai = "Da tra";
             a->data.soluong++;
             cout << "Tra sach thanh cong.";
@@ -435,6 +433,7 @@ bool dangnhap(taikhoan dstk[], int soTk, string user, string pass, taikhoan& tkH
     return false;
 }
 void taoTaiKhoan(taikhoan dstk[], int& soTk, listDg& Dsdocgia, int& sotkUser) {
+    cout << "==============Dang ky==============\n";
     taikhoan tk;
     cout << "Nhap ten dang nhap: ";
     cin >> tk.username;
@@ -491,7 +490,7 @@ void xoataikhoan(taikhoan dstk[], int& sotk, string madg) {
     }
     sotk--;
 }
-//====================================================
+//================================================================================
 void nhapSach(sach& a) {
     cout << "Nhap ma sach :";
     cin >> a.masach;
@@ -503,7 +502,7 @@ void nhapSach(sach& a) {
     cout << "Nhap so luong :";
     cin >> a.soluong;
 }
-//====================FILE===================================
+//====================FILE=======================================================
 void luudstk(taikhoan dstk[], int sotk) {
     fstream fs("dstk.txt", ios ::out);
     for (int i = 0; i < sotk; i++) {
@@ -519,7 +518,8 @@ void loadTaikhoan(taikhoan dstk[], int& sotk) {
     sotk = 0;
     string line;
     while (getline(file, line)) {  // đọc cho tới khi gặp \n
-        if (line.empty()) continue;
+        if (line.empty())
+            continue;
         stringstream tk(line);  // xu ly tung dong`
         string madg, username, pass, vaitro;
         getline(tk, madg, ',');
@@ -550,7 +550,8 @@ void loadDocgia(listDg& dsdg) {
     ifstream file("dsdg.txt");
     string line;
     while (getline(file, line)) {  // đọc cho tới khi gặp \n
-        if (line.empty()) continue;
+        if (line.empty())
+            continue;
         docGia dg;
         string tuoiStr;
         stringstream ss(line);  // xu ly tung dong`
@@ -565,10 +566,11 @@ void loadDocgia(listDg& dsdg) {
 }
 void luuDSSach(listSach& ds) {
     ofstream fs("dssach.txt");
-    if (!fs) return;
+    if (!fs)
+        return;
     for (nodeSach* p = ds.getHead(); p != NULL; p = p->next) {
-        fs << p->data.masach << "," << p->data.tensach << "," << p->data.tacgia << ","
-           << p->data.soluong << "\n";
+        fs << p->data.masach << "," << p->data.tensach << "," << p->data.tacgia
+           << "," << p->data.soluong << "\n";
     }
 }
 
@@ -576,7 +578,8 @@ void loadDSSach(listSach& ds) {
     ifstream file("dssach.txt");
     string line;
     while (getline(file, line)) {
-        if (line.empty()) continue;
+        if (line.empty())
+            continue;
         sach s;
         string soluongStr;
         stringstream ss(line);
@@ -592,16 +595,17 @@ void loadDSSach(listSach& ds) {
 void luuDSMuon(listMuontra& dsMuon) {
     fstream fs("dsmuon.txt", ios::out);
     for (auto& x : dsMuon.dsmt) {
-        fs << x.madg << "," << x.masach << "," << x.tensach << "," << x.trangthai << endl;
+        fs << x.madg << "," << x.masach << "," << x.tensach << "," << x.trangthai
+           << endl;
     }
     fs.close();
 }
-
 void loadDSMuon(listMuontra& dsMuon) {
     ifstream file("dsmuon.txt");
     string line;
     while (getline(file, line)) {
-        if (line.empty()) continue;
+        if (line.empty())
+            continue;
         muontra mt;
         stringstream ss(line);
         getline(ss, mt.madg, ',');
@@ -612,7 +616,7 @@ void loadDSMuon(listMuontra& dsMuon) {
     }
     file.close();
 }
-//===================MAIN================================
+//===================MAIN==========================================================
 int main() {
     listDg dsDg;
     listSach dsSach;
@@ -632,14 +636,16 @@ int main() {
     }
     cout << "\nTai du lieu thanh cong .";
     while (true) {
-        cout << "\n=========He thong dang nhap=========\n";
-        cout << "1. Dang nhap.\n";
-        cout << "2. Tao tai khoan moi.\n";
-        cout << "3. Thoat\n";
+        cout << "\n=========He thong dang nhap==========\n";
+        cout << "|| 1. Dang nhap.                   ||\n";
+        cout << "|| 2. Dang ky tai khoan            ||\n";
+        cout << "|| 3. Thoat                        ||\n";
+        cout << "=====================================\n";
         cout << "Nhap lua chon:";
         int lcdn;
         cin >> lcdn;
-        if (lcdn == 1) {
+        if (lcdn == 1) {  // dang nhap
+            cout << "==============Dang nhap==============\n";
             string user, pass;
             cout << "Ten dang nhap:";
             cin >> user;
@@ -651,9 +657,9 @@ int main() {
             } else {
                 cout << "Sai ten dang nhap hoac mat khau";
             }
-        } else if (lcdn == 2) {
+        } else if (lcdn == 2) {  // dang ky tk
             taoTaiKhoan(dstk, sotk, dsDg, sotkUser);
-        } else if (lcdn == 3) {
+        } else if (lcdn == 3) {  // thoat
             return 0;
         }
         while (daDangNhap == true) {
@@ -671,7 +677,7 @@ int main() {
                 cout << "[[?]] Moi nhap lua chon :";
                 int lc;
                 cin >> lc;
-                if (lc == 1) {
+                if (lc == 1) {  // them sach
                     cout << " 1.Them dau\n";
                     cout << " 2.Them cuoi\n";
                     cout << " 3.Them giua\n";
@@ -693,7 +699,7 @@ int main() {
                     luuDSSach(dsSach);
                     cout << "Them sach thanh cong.";
                 }
-                if (lc == 2) {
+                if (lc == 2) {  // xoa sach
                     int lcxoa;
                     cout << "1.Xoa theo Ma\n";
                     cout << "2.Xoa theo Ten\n";
@@ -724,7 +730,7 @@ int main() {
                         }
                     }
                 }
-                if (lc == 3) {
+                if (lc == 3) {  //
                     cout << "Nhap ID doc gia can xoa :";
                     string id;
                     cin >> id;
@@ -818,8 +824,8 @@ int main() {
                         nodeSach* p = dsSach.timSachTheoMa(ma);
                         if (p != NULL) {
                             cout << "Tim thay sach: " << p->data.masach
-                                 << " | Tac gia: " << p->data.tacgia << " | SL: " << p->data.soluong
-                                 << endl;
+                                 << " | Tac gia: " << p->data.tacgia
+                                 << " | SL: " << p->data.soluong << endl;
                         } else {
                             cout << "Khong tim thay sach.";
                         }
@@ -831,8 +837,8 @@ int main() {
                         nodeSach* p = dsSach.timSachTheoTen(tenSach);
                         if (p != NULL) {
                             cout << "Tim thay sach: " << p->data.tensach
-                                 << " | Tac gia: " << p->data.tacgia << " | SL: " << p->data.soluong
-                                 << endl;
+                                 << " | Tac gia: " << p->data.tacgia
+                                 << " | SL: " << p->data.soluong << endl;
                         } else {
                             cout << "Khong tim thay sach.";
                         }
