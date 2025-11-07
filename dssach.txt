@@ -1,0 +1,15 @@
+S001,Mach Dien 1,PGS.TS Nguyen Ngoc Son,14
+S002,Mach Dien 2,PGS.TS Nguyen Ngoc Son,12
+S003,Ky Thuat Dien Tu,TS. Trinh Cong Huy,10
+S004,Dien Tu Cong Suat,TS. Hoang Xuan Binh,8
+S005,Vi Xu Ly & Vi Dieu Khien,TS. Pham Anh Tuan,11
+S006,Ky Thuat So,TS. Le Van Tung,15
+S007,Xu Ly Tin Hieu So,TS. Nguyen Van Duc,9
+S008,Dieu Khien Tu Dong,TS. Le Van Phuong,13
+S009,Truyen Dong Dien,PGS.TS Vu Xuan Hung,10
+S010,Do Luong & Cam Bien,TS. Nguyen The Anh,7
+S011,Mang May Tinh,ThS. Nguyen Hoang Anh,16
+S012,Lap Trinh C Co Ban,ThS. Pham Van Thang,20
+S013,Lap Trinh C++ Nang Cao,ThS. Nguyen Duy Khanh,18
+S014,Cau Truc Du Lieu & Giai Thuat,TS. Tran Dinh Quy,14
+S015,Lap Trinh Nhung Voi Arduino,ThS. Vu Trong Hieu,12
