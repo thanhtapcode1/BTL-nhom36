@@ -40,7 +40,7 @@ class listSach {
     void inSachDaTimTen(string tensach);
     nodeSach* getHead();
 };
-//------------------ Cai dac ham list Sach--------------------------------------
+//------------------ Cai dat ham list Sach--------------------------------------
 listSach::listSach() {
     head = NULL;
     tail = NULL;
@@ -148,6 +148,7 @@ void listSach::inSachDaTimID(string masach) {
     nodeSach* p = timSachTheoMa(masach);
     if (p == NULL) {
         cout << "Khong tim thay sach.";
+        return;
     }
     cout << "Tim thay sach :";
     cout << "Masach:" << p->data.masach << " | Ten:" << p->data.tensach << " | TacGia:" << p->data.tacgia << " | SL:" << p->data.soluong;
@@ -156,6 +157,7 @@ void listSach::inSachDaTimTen(string ten) {
     nodeSach* p = timSachTheoTen(ten);
     if (p == NULL) {
         cout << "Khong tim thay sach.";
+        return;
     }
     cout << "Tim thay sach :";
     cout << "Masach:" << p->data.masach << " | Ten:" << p->data.tensach << " | TacGia:" << p->data.tacgia << " | SL:" << p->data.soluong;
@@ -379,7 +381,6 @@ void listMuontra::dsDaMuon(string madg) {
 void listSach::xoasachbangma(string ma) {
     nodeSach* p = head;
     nodeSach* truoc = NULL;
-
     while (p != NULL && p->data.masach != ma) {
         truoc = p;
         p = p->next;
@@ -388,10 +389,16 @@ void listSach::xoasachbangma(string ma) {
         cout << "Khong tim thay ma sach!" << endl;
         return;
     }
-    if (truoc == NULL)
-        head = p->next;
-    else
-        truoc->next = p->next;
+    if (p == head && p == tail) {  // chi co 1 node
+        head = tail = NULL;
+    } else if (p == head) {
+        head = p->next;  // xoa dau
+    } else {
+        truoc->next = p->next;  // xoa o giua
+        if (p == tail) {        // neu node o cuoi thi doi tail len
+            tail = truoc;
+        }
+    }
     delete p;
     cout << "Da xoa sach co ma: " << ma << endl;
 }
@@ -403,13 +410,19 @@ void listSach::xoasachbangten(string ten) {
         p = p->next;
     }
     if (p == NULL) {
-        cout << "Khong tim thay sach co ten: " << ten << endl;
+        cout << "Khong tim thay ma sach!" << endl;
         return;
     }
-    if (truoc == NULL)
-        head = p->next;
-    else
-        truoc->next = p->next;
+    if (p == head && p == tail) {  // chi co 1 node
+        head = tail = NULL;
+    } else if (p == head) {
+        head = p->next;  // xoa dau
+    } else {
+        truoc->next = p->next;  // xoa o giua
+        if (p == tail) {        // neu node o cuoi thi doi tail len
+            tail = truoc;
+        }
+    }
     delete p;
     cout << "Da xoa sach co ten: " << ten << endl;
 }
