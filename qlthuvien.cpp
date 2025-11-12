@@ -476,6 +476,7 @@ void taoTaiKhoan(taikhoan dstk[], int& soTk, listDg& Dsdocgia, int& sotkUser) {
         dg.gioitinh = "Chua cap nhat";
         Dsdocgia.themcuoi(dg);
         cout << "Tao tai khoan thanh cong .ID :" << dg.madg;
+        luudsdocgia(Dsdocgia);
     } else {
         tk.madg = "N/A";
         cout << "Tao tai khoan thanh cong!\n";
