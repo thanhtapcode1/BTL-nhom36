@@ -133,7 +133,54 @@ nodeSach* listSach::timSachTheoTen(string ten) {
     }
     return NULL;
 }
-
+void listSach::xoasachbangma(string ma) {
+    nodeSach* p = head;
+    nodeSach* truoc = NULL;
+    while (p != NULL && p->data.masach != ma) {
+        truoc = p;
+        p = p->next;
+    }
+    if (p == NULL) {
+        cout << "Khong tim thay ma sach!" << endl;
+        return;
+    }
+    if (p == head && p == tail) {  // chi co 1 node
+        head = tail = NULL;
+    } else if (p == head) {
+        head = p->next;  // xoa dau
+    } else {
+        truoc->next = p->next;  // xoa o giua
+        if (p == tail) {        // neu node o cuoi thi doi tail len
+            tail = truoc;
+        }
+    }
+    delete p;
+    cout << "Da xoa sach co ma: " << ma << endl;
+}
+void listSach::xoasachbangten(string ten) {
+    nodeSach* p = head;
+    nodeSach* truoc = NULL;
+    while (p != NULL && p->data.tensach != ten) {
+        truoc = p;
+        p = p->next;
+    }
+    if (p == NULL) {
+        cout << "Khong tim thay ma sach!" << endl;
+        return;
+    }
+    if (p == head && p == tail) {  // chi co 1 node
+        head = tail = NULL;
+    } else if (p == head) {
+        head = p->next;  // xoa dau
+    } else {
+        truoc->next = p->next;  // xoa o giua
+        if (p == tail) {        // neu node o cuoi thi doi tail len
+            tail = truoc;
+        }
+    }
+    delete p;
+    cout << "Da xoa sach co ten: " << ten << endl;
+}
 void listSach::themsoLuongSach(string ma, int soluong) {
     nodeSach* a = timSachTheoMa(ma);
     if (a == NULL) {
@@ -314,6 +361,7 @@ class listMuontra {
     void muonSach(string madg, nodeSach* a);
     void traSach(string madg, nodeSach* a);
     void dsDaMuon(string madg);
+    void intatca();
 };
 bool listMuontra::kiemtraSachDangMuonID(string maSach) {
     for (auto& mt : dsmt) {
@@ -378,54 +426,21 @@ void listMuontra::dsDaMuon(string madg) {
         }
     }
 }
-void listSach::xoasachbangma(string ma) {
-    nodeSach* p = head;
-    nodeSach* truoc = NULL;
-    while (p != NULL && p->data.masach != ma) {
-        truoc = p;
-        p = p->next;
-    }
-    if (p == NULL) {
-        cout << "Khong tim thay ma sach!" << endl;
+void listMuontra::intatca() {
+    if (dsmt.empty() == true) {
+        cout << "Danh sach muon rong!";
         return;
     }
-    if (p == head && p == tail) {  // chi co 1 node
-        head = tail = NULL;
-    } else if (p == head) {
-        head = p->next;  // xoa dau
-    } else {
-        truoc->next = p->next;  // xoa o giua
-        if (p == tail) {        // neu node o cuoi thi doi tail len
-            tail = truoc;
-        }
+    cout << "\n====================Danh sach muon====================\n";
+    cout << string(65, '=') << endl;
+    cout << left << setw(10) << "Ma DG" << setw(35) << "Sach Da Muon" << setw(20) << "Trang thai" << endl;
+    cout << string(65, '-') << endl;  // in ra 65 ki tu -
+    for (auto& x : dsmt) {
+        cout << left << setw(10) << x.madg << setw(35) << x.tensach << setw(20) << x.trangthai << endl;
     }
-    delete p;
-    cout << "Da xoa sach co ma: " << ma << endl;
+    cout << string(65, '=');
 }
-void listSach::xoasachbangten(string ten) {
-    nodeSach* p = head;
-    nodeSach* truoc = NULL;
-    while (p != NULL && p->data.tensach != ten) {
-        truoc = p;
-        p = p->next;
-    }
-    if (p == NULL) {
-        cout << "Khong tim thay ma sach!" << endl;
-        return;
-    }
-    if (p == head && p == tail) {  // chi co 1 node
-        head = tail = NULL;
-    } else if (p == head) {
-        head = p->next;  // xoa dau
-    } else {
-        truoc->next = p->next;  // xoa o giua
-        if (p == tail) {        // neu node o cuoi thi doi tail len
-            tail = truoc;
-        }
-    }
-    delete p;
-    cout << "Da xoa sach co ten: " << ten << endl;
-}
+
 //====================== TaiKhoan=================================
 struct taikhoan {
     string username;
@@ -793,12 +808,15 @@ int main() {
                         int abc;
                         cout << "1.Danh sach Sach.\n";
                         cout << "2.Danh sach Doc Gia.\n";
+                        cout << "3.Danh sach muon.\n";
                         cout << "[?]Moi nhap lua chon:";
                         cin >> abc;
                         if (abc == 1)
                             dsSach.indssach();
                         else if (abc == 2)
                             dsDg.inDsdg();
+                        else if (abc == 3)
+                            dsmuon.intatca();
                         break;
                     }
                     case 7:
