@@ -109,7 +109,6 @@ void listSach::themsachbatkids(sach s, int pos) {
     }
     p->next = a->next;
     a->next = p;
-    size++;
 }
 void listSach::indssach() {
     if (isempty()) {
@@ -394,11 +393,12 @@ class listMuontra {
     bool kiemtraSachDangMuonID(string maSach);
     bool kiemtraSachDangMuonTen(string tenSach);
     bool kiemtraMuonSachIDDG(string id);
-
     void muonSach(string masach, string madg, nodeSach* a);
     void traSach(string madg, nodeSach* a);
     void dsDaMuon(string madg);
     void intatca();
+    void xoaLichSuTheoDG(string madg);
+    void xoaLichSuTheoSach(string maSach);
 };
 bool listMuontra::kiemtraSachDangMuonID(string maSach) {
     for (auto& mt : dsmt) {
@@ -486,7 +486,24 @@ void listMuontra::intatca() {
     }
     cout << string(65, '=');
 }
-
+void listMuontra::xoaLichSuTheoDG(string madg) {
+    vector<muontra> tam;
+    for (auto& mt : dsmt) {
+        if (mt.madg != madg) {
+            tam.push_back(mt);  // giu lai cac doc gia ko phai doc gia truyen vao ham
+        }
+    }
+    dsmt = tam;
+}
+void listMuontra::xoaLichSuTheoSach(string maSach) {
+    vector<muontra> tam;
+    for (auto& mt : dsmt) {
+        if (mt.masach != maSach) {
+            tam.push_back(mt);  // giu lai sach ko phai sach truyen vao ham
+        }
+    }
+    dsmt = tam;
+}
 //====================== TaiKhoan================================================
 struct taikhoan {
     string username;
@@ -589,10 +606,8 @@ int nhapSoNguyen() {
     }
 }
 string nhapChuoi() {
-    cin.clear();
-    cin.ignore(1000, '\n');
     string s;
-    getline(cin, s);
+    getline(cin >> ws, s);
     return s;
 }
 void nhapSach(sach& a) {
@@ -836,6 +851,7 @@ int main() {
                                 cout << " Sach nay hien dang duoc doc gia muon. Khong the xoa!\n";
                             else
                                 dsSach.xoasachbangma(masach);
+                            dsmuon.xoaLichSuTheoSach(masach);
                             luuDSSach(dsSach);
                         } else if (lcxoa == 2) {
                             cout << "Nhap Ten can xoa :";
@@ -845,8 +861,12 @@ int main() {
                             else if (dsmuon.kiemtraSachDangMuonTen(tenSach))
                                 cout << "Sach nay hien dang duoc doc gia muon. Khong the xoa!\n";
                             else {
-                                dsSach.xoasachbangten(tenSach);
-                                luuDSSach(dsSach);
+                                nodeSach* p = dsSach.timSachTheoTen(tenSach);
+                                if (p != NULL) {
+                                    dsSach.xoasachbangten(tenSach);
+                                    dsmuon.xoaLichSuTheoSach(p->data.masach);
+                                    luuDSSach(dsSach);
+                                }
                             }
                         }
                         break;
@@ -868,6 +888,7 @@ int main() {
                             cout << "Doc gia dang muon sach. Khong the xoa!\n";
                         } else {
                             dsDg.xoadgID(id);
+                            dsmuon.xoaLichSuTheoDG(id);
                             xoataikhoan(dstk, sotk, id);
                             luudsdocgia(dsDg);
                             luudstk(dstk, sotk);
@@ -936,10 +957,11 @@ int main() {
                         cout << "===========Doi mat khau==========\n";
                         doiMk(taikhoanHienTai, dstk, sotk);
                         break;
-                        case 8:
-                            cout << "Da dang xuat";
-                            daDangNhap = false;
-                            break;
+                    }
+                    case 8: {
+                        cout << "Da dang xuat";
+                        daDangNhap = false;
+                        break;
                         default:
                             cout << "Lua chon khong hop le!";
                     }
