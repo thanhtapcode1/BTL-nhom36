@@ -30,7 +30,6 @@ class listSach {
     nodeSach* timSachTheoTen(string ten);
     void timSachgandung(string tensach);
     void xoasachbangma(string ma);
-    void xoasachbangten(string ten);
     bool isempty();
     void indssach();
     void themsachdauds(sach s);
@@ -135,9 +134,13 @@ nodeSach* listSach::timSachTheoMa(string ma) {
     return NULL;
 }
 nodeSach* listSach::timSachTheoTen(string ten) {
+    // chuyen chuoi ve chu thuong roi tim kiem
+    for (char& c : ten) c = tolower(c);
     nodeSach* p = head;
     while (p != NULL) {
-        if (p->data.tensach == ten)
+        string temp = p->data.tensach;
+        for (char& c : temp) c = tolower(c);
+        if (temp == ten)
             return p;
         p = p->next;
     }
@@ -165,31 +168,6 @@ void listSach::xoasachbangma(string ma) {
         }
     }
     delete p;
-    cout << "Da xoa sach co ma: " << ma << endl;
-}
-void listSach::xoasachbangten(string ten) {
-    nodeSach* p = head;
-    nodeSach* truoc = NULL;
-    while (p != NULL && p->data.tensach != ten) {
-        truoc = p;
-        p = p->next;
-    }
-    if (p == NULL) {
-        cout << "Khong tim thay sach co ten " << ten << " !" << endl;
-        return;
-    }
-    if (p == head && p == tail) {  // chi co 1 node
-        head = tail = NULL;
-    } else if (p == head) {
-        head = p->next;  // xoa dau
-    } else {
-        truoc->next = p->next;  // xoa o giua
-        if (p == tail) {        // neu node o cuoi thi doi tail len
-            tail = truoc;
-        }
-    }
-    delete p;
-    cout << "Da xoa sach co ten: " << ten << endl;
 }
 void listSach::themsoLuongSach(string ma, int soluong) {
     nodeSach* a = timSachTheoMa(ma);
@@ -399,6 +377,8 @@ class listMuontra {
     void intatca();
     void xoaLichSuTheoDG(string madg);
     void xoaLichSuTheoSach(string maSach);
+    void inYCmuon();
+    void duyetYC(string madg, string masach, nodeSach* a);
 };
 bool listMuontra::kiemtraSachDangMuonID(string maSach) {
     for (auto& mt : dsmt) {
@@ -434,19 +414,18 @@ void listMuontra::muonSach(string masach, string madg, nodeSach* a) {
         return;
     }
     for (auto& x : dsmt) {  // kiem tra da doc gia do da muon sach nay hay chua
-        if (x.madg == madg && x.masach == masach && x.trangthai == "Dang muon") {
-            cout << "Ban dang muon sach nay roi!\n";
+        if (x.madg == madg && x.masach == masach && (x.trangthai == "Dang muon" || x.trangthai == "Cho duyet")) {
+            cout << "Ban da gui yeu cau hoac da muon sach nay roi!\n";
             return;
         }
     }
-    a->data.soluong--;
     muontra mt;
     mt.madg = madg;
     mt.masach = a->data.masach;
     mt.tensach = a->data.tensach;
-    mt.trangthai = "Dang muon";
+    mt.trangthai = "Cho duyet";
     dsmt.push_back(mt);
-    cout << "Ban da muon thanh cong sach :" << a->data.tensach;
+    cout << "Da gui yeu cau den admin";
 }
 void listMuontra::traSach(string madg, nodeSach* a) {
     if (a == NULL) {
@@ -464,12 +443,16 @@ void listMuontra::traSach(string madg, nodeSach* a) {
     cout << "Khong tim thay sach da muon";
 }
 void listMuontra::dsDaMuon(string madg) {
+    bool flag = false;
+    cout << "========= Sach da muon =========\n";
     for (auto& x : dsmt) {
         if (x.madg == madg) {
-            cout << "========= Sach da muon =========\n";
-            cout << "- Ma sach:" << x.masach << " -Ten Sach:" << x.tensach
-                 << " -Trang thai:" << x.trangthai << endl;
+            flag = true;
+            cout << "- Ma sach:" << x.masach << " -Ten Sach:" << x.tensach << " -Trang thai:" << x.trangthai << endl;
         }
+    }
+    if (flag == false) {
+        cout << "Ban chua muon sach nao.\n";
     }
 }
 void listMuontra::intatca() {
@@ -503,6 +486,35 @@ void listMuontra::xoaLichSuTheoSach(string maSach) {
         }
     }
     dsmt = tam;
+}
+void listMuontra::inYCmuon() {
+    cout << "\n=============Duyet Yeu Cau Muon Sach===========\n";
+    bool flag = false;
+    for (auto& x : dsmt) {
+        if (x.trangthai == "Cho duyet") {
+            flag = true;
+            cout << "- DG: " << x.madg << " | Sach: " << x.tensach << " | Ma: " << x.masach << endl;
+        }
+    }
+    if (flag == false) {
+        cout << "Khong co yeu cau nao dang cho duyet!\n";
+        return;
+    }
+}
+void listMuontra::duyetYC(string madg, string masach, nodeSach* a) {
+    bool flag = false;
+    for (auto& x : dsmt) {
+        if (x.madg == madg && x.masach == masach && x.trangthai == "Cho duyet") {
+            x.trangthai = "Dang muon";
+            a->data.soluong--;
+            cout << "Duyet thanh cong.\n";
+            flag = true;
+            return;
+        }
+    }
+    if (flag == false) {
+        cout << "Khong tim thay yeu cau hop le!";
+    }
 }
 //====================== TaiKhoan================================================
 struct taikhoan {
@@ -620,7 +632,17 @@ void nhapSach(sach& a) {
     cout << "Nhap so luong:";
     a.soluong = nhapSoNguyen();
 }
-
+bool kiemtraChuoiLaSo(const string& s) {
+    if (s.empty()) {  // chuoi rong""
+        return false;
+    }
+    for (char c : s) {
+        if (isdigit((unsigned char)c) == false) {  // ep kieu so nguyen khong dau
+            return false;
+        }
+    }
+    return true;
+}
 //====================FILE=======================================================
 void luudstk(taikhoan dstk[], int sotk) {
     fstream fs("dstk.txt", ios ::out);
@@ -666,19 +688,30 @@ void luudsdocgia(listDg& dsdg) {
     fs.close();
 }
 void loadDocgia(listDg& dsdg) {
+    dsdg = listDg();  // xoa du lieu cu
     ifstream file("dsdg.txt");
+    if (!file.is_open()) {
+        return;
+    }
     string line;
-    while (getline(file, line)) {  // đọc cho tới khi gặp \n
-        if (line.empty())
+    while (getline(file, line)) {
+        if (line.empty()) {
             continue;
+        }
+
+        stringstream ss(line);
         docGia dg;
         string tuoiStr;
-        stringstream ss(line);  // xu ly tung dong`
         getline(ss, dg.madg, ',');
         getline(ss, dg.ten, ',');
         getline(ss, tuoiStr, ',');
         getline(ss, dg.gioitinh, ',');
-        dg.tuoi = stoi(tuoiStr);  // chuyen string sang int
+        if (dg.madg == "" || dg.ten == "" || tuoiStr == "" || dg.gioitinh == "")
+            continue;
+        if (kiemtraChuoiLaSo(tuoiStr))
+            dg.tuoi = stoi(tuoiStr);
+        else
+            dg.tuoi = 0;
         dsdg.themcuoi(dg);
     }
     file.close();
@@ -694,11 +727,14 @@ void luuDSSach(listSach& ds) {
 }
 
 void loadDSSach(listSach& ds) {
+    ds = listSach();  // clear danh sách cũ
     ifstream file("dssach.txt");
+
+    if (!file.is_open()) return;
+
     string line;
     while (getline(file, line)) {
-        if (line.empty())
-            continue;
+        if (line.empty()) continue;
         sach s;
         string soluongStr;
         stringstream ss(line);
@@ -706,7 +742,16 @@ void loadDSSach(listSach& ds) {
         getline(ss, s.tensach, ',');
         getline(ss, s.tacgia, ',');
         getline(ss, soluongStr, ',');
-        s.soluong = stoi(soluongStr);
+        // bo qua khoang trang""
+        if (s.masach == "" || s.tensach == "" || s.tacgia == "" || soluongStr == "") {
+            continue;
+        }
+        // so luong phai la so , neu khac so tra ve 0
+        if (kiemtraChuoiLaSo(soluongStr)) {
+            s.soluong = stoi(soluongStr);
+        } else {
+            s.soluong = 0;
+        }
         ds.themsachcuoids(s);
     }
     file.close();
@@ -720,17 +765,24 @@ void luuDSMuon(listMuontra& dsMuon) {
     fs.close();
 }
 void loadDSMuon(listMuontra& dsMuon) {
+    dsMuon.dsmt.clear();
     ifstream file("dsmuon.txt");
+    if (!file.is_open()) return;
     string line;
     while (getline(file, line)) {
-        if (line.empty())
-            continue;
+        if (line.empty()) continue;
+
         muontra mt;
         stringstream ss(line);
+
         getline(ss, mt.madg, ',');
         getline(ss, mt.masach, ',');
         getline(ss, mt.tensach, ',');
         getline(ss, mt.trangthai, ',');
+        // bo qua khoang trang""
+        if (mt.madg == "" || mt.masach == "" || mt.tensach == "" || mt.trangthai == "") {
+            continue;
+        }
         dsMuon.dsmt.push_back(mt);
     }
     file.close();
@@ -790,9 +842,10 @@ int main() {
                 cout << "||          3. XOA DOC GIA THEO ID                  ||\n";
                 cout << "||          4. TIM SACH ( Ma / Ten )                ||\n";
                 cout << "||          5. THEM SO LUONG SACH                   ||\n";
-                cout << "||          6. HIEN THI DU LIEU                     ||\n";
-                cout << "||          7. DOI MAT KHAU                         ||\n";
-                cout << "||          8. DANG XUAT                            ||\n";
+                cout << "||          6. DUYET YEU CAU MUON SACH              ||\n";
+                cout << "||          7. HIEN THI DU LIEU                     ||\n";
+                cout << "||          8. DOI MAT KHAU                         ||\n";
+                cout << "||          9. DANG XUAT                            ||\n";
                 cout << "=====================================================\n";
                 cout << "[[?]] Moi nhap lua chon :";
                 int lc;
@@ -831,6 +884,8 @@ int main() {
                         break;
                     }
                     case 2: {  // XOA SACH
+                        cout << "\n================Sach Hien Co==================\n";
+                        dsSach.indssach();
                         int lcxoa;
                         cout << "===========Xoa Sach==========\n";
                         cout << "0.Quay lai\n";
@@ -845,27 +900,38 @@ int main() {
                             cout << "Nhap Ma can xoa :";
                             string masach;
                             cin >> masach;
+                            string masachXoa = masach;
                             if (dsSach.isempty())
                                 cout << " Danh sach sach hien dang rong!\n";
                             else if (dsmuon.kiemtraSachDangMuonID(masach))
                                 cout << " Sach nay hien dang duoc doc gia muon. Khong the xoa!\n";
-                            else
+                            else {
                                 dsSach.xoasachbangma(masach);
+                                cout << "Da xoa sach co ma " << masachXoa;
+                            }
                             dsmuon.xoaLichSuTheoSach(masach);
                             luuDSSach(dsSach);
                         } else if (lcxoa == 2) {
-                            cout << "Nhap Ten can xoa :";
+                            cout << "Nhap ten sach can xoa: ";
                             string tenSach = nhapChuoi();
-                            if (dsSach.isempty())
-                                cout << "Danh sach sach hien dang rong!\n";
-                            else if (dsmuon.kiemtraSachDangMuonTen(tenSach))
-                                cout << "Sach nay hien dang duoc doc gia muon. Khong the xoa!\n";
-                            else {
+                            if (dsSach.isempty()) {
+                                cout << "Danh sach sach dang rong!\n";
+                            } else {
                                 nodeSach* p = dsSach.timSachTheoTen(tenSach);
-                                if (p != NULL) {
-                                    dsSach.xoasachbangten(tenSach);
-                                    dsmuon.xoaLichSuTheoSach(p->data.masach);
-                                    luuDSSach(dsSach);
+                                if (p == NULL) {
+                                    cout << "Khong tim thay sach ten: " << tenSach << endl;
+                                } else {
+                                    string tenSachXoa = p->data.tensach;
+                                    string maXoa = p->data.masach;
+                                    // neu sach dang dc muon => ko xoa
+                                    if (dsmuon.kiemtraSachDangMuonID(maXoa)) {
+                                        cout << "Sach dang duoc muon. Khong the xoa!\n";
+                                    } else {
+                                        dsSach.xoasachbangma(maXoa);
+                                        dsmuon.xoaLichSuTheoSach(maXoa);
+                                        luuDSSach(dsSach);
+                                        cout << "Da xoa sach co ten " << tenSachXoa;
+                                    }
                                 }
                             }
                         }
@@ -934,6 +1000,25 @@ int main() {
                         break;
                     }
                     case 6: {
+                        dsmuon.inYCmuon();
+                        string madg, masach;
+                        cout << "Nhap ma doc gia can duyet: ";
+                        madg = nhapChuoi();
+                        cout << "Nhap ma sach can duyet: ";
+                        masach = nhapChuoi();
+                        nodeSach* a = dsSach.timSachTheoMa(masach);
+                        if (!a) {
+                            cout << "Khong hop le!";
+                            break;
+                        }
+                        if (a->data.soluong <= 0) {
+                            cout << "Sach da het, khong the duyet!\n";
+                            break;
+                        }
+                        dsmuon.duyetYC(madg, masach, a);
+                        break;
+                    }
+                    case 7: {
                         cout << "===========Hien thi du lieu==========\n";
                         int abc;
                         cout << "0.Quay ve\n";
@@ -953,12 +1038,12 @@ int main() {
                             dsmuon.intatca();
                         break;
                     }
-                    case 7: {
+                    case 8: {
                         cout << "===========Doi mat khau==========\n";
                         doiMk(taikhoanHienTai, dstk, sotk);
                         break;
                     }
-                    case 8: {
+                    case 9: {
                         cout << "Da dang xuat";
                         daDangNhap = false;
                         break;
@@ -1010,6 +1095,8 @@ int main() {
                         break;
                     }
                     case 3: {
+                        cout << "\n=============Sach Hien Co===========\n";
+                        dsSach.indssach();
                         cout << "===========Muon Sach==========\n";
                         string masach;
                         cout << "Nhap ma sach can muon(nhap 0 de quay ve) :";
