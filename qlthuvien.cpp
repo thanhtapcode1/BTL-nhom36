@@ -857,30 +857,42 @@ int main() {
                         cout << " 1.Them dau\n";
                         cout << " 2.Them cuoi\n";
                         cout << " 3.Them giua\n";
-                        cout << "[?]Moi nhap lua chon:";
                         int lcthem;
-                        lcthem = nhapSoNguyen();
+                        while (true) {
+                            cout << "[?] Moi nhap lua chon: ";
+                            lcthem = nhapSoNguyen();
+                            if (lcthem >= 0 && lcthem <= 3) {
+                                break;
+                            }
+                            cout << "Lua chon khong hop le! Vui long nhap lai (0-3).\n";
+                        }
                         if (lcthem == 0) {
                             break;
                         }
                         sach a;
-                        nhapSach(a);
                         if (dsSach.tonTaiMaSach(a.masach)) {
                             cout << "Ma sach da ton tai .Khong the them!";
                             break;
                         }
-                        if (lcthem == 1)
+                        if (lcthem == 1) {
+                            nhapSach(a);
                             dsSach.themsachdauds(a);
-                        else if (lcthem == 2)
+                            cout << "Them sach thanh cong.";
+                        } else if (lcthem == 2) {
+                            nhapSach(a);
                             dsSach.themsachcuoids(a);
-                        else if (lcthem == 3) {
+                            cout << "Them sach thanh cong.";
+                        } else if (lcthem == 3) {
+                            nhapSach(a);
                             int pos;
                             cout << "Nhap vi tri muon them :";
                             pos = nhapSoNguyen();
                             dsSach.themsachbatkids(a, pos);
+                            cout << "Them sach thanh cong.";
+                        } else {
+                            cout << "Khong hop le";
                         }
                         luuDSSach(dsSach);
-                        cout << "Them sach thanh cong.";
                         break;
                     }
                     case 2: {  // XOA SACH
@@ -891,8 +903,14 @@ int main() {
                         cout << "0.Quay lai\n";
                         cout << "1.Xoa theo Ma\n";
                         cout << "2.Xoa theo Ten\n";
-                        cout << "[?]Moi nhap lua chon:";
-                        lcxoa = nhapSoNguyen();
+                        while (true) {
+                            cout << "[?] Moi nhap lua chon: ";
+                            lcxoa = nhapSoNguyen();
+                            if (lcxoa >= 0 && lcxoa <= 2) {
+                                break;
+                            }
+                            cout << "Lua chon khong hop le! Vui long nhap lai (0-2).\n";
+                        }
                         if (lcxoa == 0) {
                             break;
                         }
@@ -967,8 +985,14 @@ int main() {
                         cout << "0.Quay ve\n";
                         cout << "1.Tim theo Ma\n";
                         cout << "2.Tim theo Ten\n";
-                        cout << "[?]Moi nhap lua chon:";
-                        lctim = nhapSoNguyen();
+                        while (true) {
+                            cout << "[?] Moi nhap lua chon: ";
+                            lctim = nhapSoNguyen();
+                            if (lctim >= 0 && lctim <= 2) {
+                                break;
+                            }
+                            cout << "Lua chon khong hop le! Vui long nhap lai (0-2).\n";
+                        }
                         if (lctim == 0) {
                             break;
                         }
@@ -1025,8 +1049,14 @@ int main() {
                         cout << "1.Danh sach Sach.\n";
                         cout << "2.Danh sach Doc Gia.\n";
                         cout << "3.Lich su muon.\n";
-                        cout << "[?]Moi nhap lua chon:";
-                        abc = nhapSoNguyen();
+                        while (true) {
+                            cout << "[?] Moi nhap lua chon: ";
+                            abc = nhapSoNguyen();
+                            if (abc >= 0 && abc <= 3) {
+                                break;
+                            }
+                            cout << "Lua chon khong hop le! Vui long nhap lai (0-3).\n";
+                        }
                         if (abc == 0) {
                             break;
                         }
@@ -1075,9 +1105,15 @@ int main() {
                         cout << " 0.Quay ve\n";
                         cout << " 1.Tim theo Ma\n";
                         cout << " 2.Tim theo Ten\n";
-                        cout << "[?]Moi nhap lua chon:";
                         int lctim;
-                        lctim = nhapSoNguyen();
+                        while (true) {
+                            cout << "[?] Moi nhap lua chon: ";
+                            lctim = nhapSoNguyen();
+                            if (lctim >= 0 && lctim <= 2) {
+                                break;
+                            }
+                            cout << "Lua chon khong hop le! Vui long nhap lai (0-2).\n";
+                        }
                         if (lctim == 0) {
                             break;
                         }
