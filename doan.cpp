@@ -483,18 +483,37 @@ void listMuontra::dsDaMuon(string madg) {
     drawFooterSachDaMuon();
 }
 void listMuontra::intatca() {
-    if (dsmt.empty() == true) {
-        cout << "Danh sach muon rong!";
+    clearScreen();                   // Xóa màn hình trước khi in
+    drawHeader("LICH SU MUON TRA");  // Tiêu đề to trên cùng
+    if (dsmt.empty()) {
+        notifyError("Danh sach muon rong!");
         return;
     }
-    cout << "\n====================Lich Su Muon====================\n";
-    cout << string(65, '=') << endl;
-    cout << left << setw(10) << "Ma DG" << setw(35) << "Sach Da Muon" << setw(20) << "Trang thai" << endl;
-    cout << string(65, '-') << endl;  // in ra 65 ki tu -
+    drawMuonHeader();  // khung đầu bảng
+    setColor(10);
+    int stt = 1;
     for (auto& x : dsmt) {
-        cout << left << setw(10) << x.madg << setw(35) << x.tensach << setw(20) << x.trangthai << endl;
+        string tensach = x.tensach;
+        if (tensach.size() > 29) tensach = tensach.substr(0, 26) + "...";
+        cout << "| " << left << setw(3) << stt++
+             << "| " << left << setw(9) << x.madg
+             << "| " << left << setw(9) << x.masach
+             << "| " << left << setw(29) << tensach
+             << "| ";
+        if (x.trangthai == "Dang muon")
+            setColor(14);  // vàng
+        else if (x.trangthai == "Da tra")
+            setColor(10);  // xanh lá
+        else if (x.trangthai == "Cho duyet")
+            setColor(12);  // đỏ
+        else
+            setColor(7);
+        cout << left << setw(9) << x.trangthai;
+        resetColor();
+        cout << "|\n";
     }
-    cout << string(65, '=');
+    resetColor();
+    drawMuonFooter();  // khung cuối bảng
 }
 void listMuontra::xoaLichSuTheoDG(string madg) {
     vector<muontra> tam;
@@ -887,10 +906,19 @@ int main() {
                 switch (lc) {
                     case 1: {  // THEM SACH
                         clearScreen();
-                        int lcthem = drawSubMenu("THEM SACH MOI", {"Quay lai",
-                                                                   "Them o dau",
-                                                                   "Them o cuoi",
-                                                                   "Them o vi tri bat ky"});
+                        drawSubMenu("THEM SACH MOI", {"Quay lai",
+                                                      "Them o dau",
+                                                      "Them o cuoi",
+                                                      "Them o vi tri bat ky"});
+                        int lcthem;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            lcthem = nhapSoNguyen();
+                            if (lcthem >= 0 && lcthem <= 3) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-3)");
+                        }
                         if (lcthem == 0) {
                             break;
                         }
@@ -921,9 +949,18 @@ int main() {
                         drawHeader("XOA SACH");
                         dsSach.indssach();
                         cout << "\n";
-                        int lcxoa = drawSubMenu("CHON HINH THUC XOA", {"Quay lai",
-                                                                       "Xoa theo Ma",
-                                                                       "Xoa theo Ten"});
+                        drawSubMenu("CHON HINH THUC XOA", {"Quay lai",
+                                                           "Xoa theo Ma",
+                                                           "Xoa theo Ten"});
+                        int lcxoa;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            lcxoa = nhapSoNguyen();
+                            if (lcxoa >= 0 && lcxoa <= 2) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-2)");
+                        }
                         if (lcxoa == 0) {
                             break;
                         }
@@ -1006,7 +1043,16 @@ int main() {
                     }
                     case 4: {
                         clearScreen();
-                        int lctim = drawSubMenu("TIM SACH", {"Quay ve", "Tim theo Ma", "Tim theo Ten"});
+                        drawSubMenu("TIM SACH", {"Quay ve", "Tim theo Ma", "Tim theo Ten"});
+                        int lctim;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            lctim = nhapSoNguyen();
+                            if (lctim >= 0 && lctim <= 2) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-2)");
+                        }
                         if (lctim == 0) {
                             break;
                         }
@@ -1071,7 +1117,16 @@ int main() {
                     }
                     case 7: {
                         clearScreen();
-                        int abc = drawSubMenu("HIEN THI DU LIEU", {"Quay ve", "Xem danh sach sach", "Xem danh sach doc gia", "Xem lich su muon"});
+                        drawSubMenu("HIEN THI DU LIEU", {"Quay ve", "Xem danh sach sach", "Xem danh sach doc gia", "Xem lich su muon"});
+                        int abc;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            abc = nhapSoNguyen();
+                            if (abc >= 0 && abc <= 3) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-3)");
+                        }
                         if (abc == 0) {
                             break;
                         }
@@ -1126,7 +1181,16 @@ int main() {
                         break;
                     case 2: {
                         clearScreen();
-                        int lctim = drawSubMenu("TIM SACH", {"Quay ve", "Tim theo Ma", "Tim theo Ten"});
+                        drawSubMenu("TIM SACH", {"Quay ve", "Tim theo Ma", "Tim theo Ten"});
+                        int lctim;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            lctim = nhapSoNguyen();
+                            if (lctim >= 0 && lctim <= 2) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-2)");
+                        }
                         if (lctim == 0) {
                             break;
                         }
