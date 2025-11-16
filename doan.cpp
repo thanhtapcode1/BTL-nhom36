@@ -585,22 +585,22 @@ void taoTaiKhoan(taikhoan dstk[], int& soTk, listDg& Dsdocgia, int& sotkUser) {
     cin >> tk.username;
     for (int i = 0; i < soTk; i++) {
         if (dstk[i].username == tk.username) {
-            cout << "Ten dang nhap da ton tai!\n";
+            notifyError("Ten dang nhap da ton tai");
             return;
         }
     }
     cout << "Nhap mat khau: ";
     cin >> tk.pasword;
     string vaitro;
-    cout << "Nhap vai tro (admin/user): ";
     while (true) {
+        cout << "Nhap vai tro (admin/user): ";
         cin >> vaitro;
         for (auto& c : vaitro) c = tolower(c);  // chuyen ve chu thuong
         if (vaitro == "admin" || vaitro == "user") {
             tk.vaitro = vaitro;
             break;
         }
-        cout << "Vai tro khong hop le! vui long nhap theo dinh dang :";
+        notifyError("Vai tro khong hop le .Vui long nhap theo yeu cau!");
     }
     if (tk.vaitro == "user") {
         tk.madg = Dsdocgia.taoIDtudong();
@@ -610,10 +610,10 @@ void taoTaiKhoan(taikhoan dstk[], int& soTk, listDg& Dsdocgia, int& sotkUser) {
         dg.tuoi = 0;
         dg.gioitinh = "Chua cap nhat";
         Dsdocgia.themcuoi(dg);
-        cout << "Tao tai khoan thanh cong .ID :" << dg.madg;
+        notifySuccess("Tao tai khoan thanh cong .ID :" + dg.madg);
     } else {
         tk.madg = "N/A";
-        cout << "Tao tai khoan thanh cong!\n";
+        notifySuccess("Tao tai khoan thanh cong.");
     }
     dstk[soTk++] = tk;
 }
@@ -889,7 +889,6 @@ int main() {
             drawHeader("Dang ky tai khoan");
             taoTaiKhoan(dstk, sotk, dsDg, sotkUser);
             luudsdocgia(dsDg);
-            notifySuccess("Dang ky tai khoan thanh cong");
             pauseScreen();
         } else if (lcdn == 3) {  // thoat
             return 0;
