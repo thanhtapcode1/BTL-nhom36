@@ -65,7 +65,6 @@ inline void drawMenuBox(const vector<string>& items, const string& title = "MENU
     cout << "→ Nhap lua chon: ";
 }
 inline void drawHeader(const string& title, int width = 60) {
-    clearScreen();
     setColor(11);
     cout << "╔" << string(width, '-') << "╗\n";
 
@@ -76,7 +75,7 @@ inline void drawHeader(const string& title, int width = 60) {
     cout << "╚" << string(width, '-') << "╝\n\n";
     resetColor();
 }
-inline int drawSubMenu(const string& title, const vector<string>& items) {
+inline void drawSubMenu(const string& title, const vector<string>& items) {
     // KHÔNG clearScreen
     setColor(11);
 
@@ -103,11 +102,6 @@ inline int drawSubMenu(const string& title, const vector<string>& items) {
     setColor(11);
     cout << "└" << string(38, '-') << "┘\n";
     resetColor();
-
-    cout << "→ Nhap lua chon: ";
-    int lc;
-    cin >> lc;
-    return lc;
 }
 inline void notifySuccess(const string& msg) {
     setColor(10);
@@ -297,7 +291,7 @@ inline void drawMuonHeader() {
          << "+\n";
 
     string title = "DANH SACH MUON TRA";
-    int width = 4 + 10 + 10 + 30 + 10 + 5;
+    int width = 4 + 10 + 10 + 30 + 10 + 5 - 1;
     int pad = (width - title.size()) / 2;
 
     cout << "|" << string(width, ' ') << "|\n";
