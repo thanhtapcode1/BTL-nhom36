@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "banner.h"
 #include "giaodien.h"
 using namespace std;
 
@@ -850,8 +851,9 @@ int main() {
     loadDocgia(dsDg);
     loadDSSach(dsSach);
     loadDSMuon(dsmuon);
+    drawTHUVIEN_Banner();
     hieuungloading();
-    clearScreen();
+    loadingEffect();
     cout << "Tai du lieu thanh cong .";
     pauseScreen();
     while (true) {
@@ -860,10 +862,13 @@ int main() {
             "2. Dang ky tai khoan",
             "3. Thoat"};
         clearScreen();
+        drawTHUVIEN_Banner();
         drawMenuBox(menuLogin, "DANG NHAP HE THONG");
         int lcdn;
         lcdn = nhapSoNguyen();
         if (lcdn == 1) {  // dang nhap
+            clearScreen();
+            drawTHUVIEN_Banner();
             drawHeader("Dang nhap");
             string user, pass;
             cout << "Ten dang nhap:";
@@ -879,6 +884,8 @@ int main() {
                 pauseScreen();
             }
         } else if (lcdn == 2) {  // dang ky tk
+            clearScreen();
+            drawTHUVIEN_Banner();
             drawHeader("Dang ky tai khoan");
             taoTaiKhoan(dstk, sotk, dsDg, sotkUser);
             luudsdocgia(dsDg);
@@ -900,12 +907,14 @@ int main() {
                     "8. Doi mat khau",
                     "9. Dang xuat"};
                 clearScreen();
+                drawTHUVIEN_Banner();
                 drawMenuBox(menuAd, "ADMIN MENU");
                 int lc;
                 lc = nhapSoNguyen();
                 switch (lc) {
                     case 1: {  // THEM SACH
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawSubMenu("THEM SACH MOI", {"Quay lai",
                                                       "Them o dau",
                                                       "Them o cuoi",
@@ -946,6 +955,7 @@ int main() {
                     }
                     case 2: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("XOA SACH");
                         dsSach.indssach();
                         cout << "\n";
@@ -1013,6 +1023,7 @@ int main() {
                     }
                     case 3: {  // XOA DOC GIA
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("XOA DOC GIA");
                         dsDg.inDsdg();
                         cout << "\n";
@@ -1043,6 +1054,7 @@ int main() {
                     }
                     case 4: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawSubMenu("TIM SACH", {"Quay ve", "Tim theo Ma", "Tim theo Ten"});
                         int lctim;
                         while (true) {
@@ -1072,6 +1084,7 @@ int main() {
                     }
                     case 5: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("Them so luong sach");
                         dsSach.indssach();
                         cout << "Nhap ma sach can them (nhap 0 de quay ve): ";
@@ -1089,6 +1102,7 @@ int main() {
                     }
                     case 6: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("Duyet yeu cau muon sach");
                         dsmuon.inYCmuon();
                         string madg, masach;
@@ -1117,6 +1131,7 @@ int main() {
                     }
                     case 7: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawSubMenu("HIEN THI DU LIEU", {"Quay ve", "Xem danh sach sach", "Xem danh sach doc gia", "Xem lich su muon"});
                         int abc;
                         while (true) {
@@ -1144,6 +1159,7 @@ int main() {
                     }
                     case 8: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         doiMk(taikhoanHienTai, dstk, sotk);
                         pauseScreen();
                         break;
@@ -1160,6 +1176,7 @@ int main() {
                 }
             } else if (taikhoanHienTai.vaitro == "user") {
                 clearScreen();
+                drawTHUVIEN_Banner();
                 vector<string> menuUserVec = {
                     "1. Xem sach",
                     "2. Tim sach",
@@ -1176,11 +1193,13 @@ int main() {
                 switch (lc) {
                     case 1:
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         dsSach.indssach();
                         pauseScreen();
                         break;
                     case 2: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawSubMenu("TIM SACH", {"Quay ve", "Tim theo Ma", "Tim theo Ten"});
                         int lctim;
                         while (true) {
@@ -1209,6 +1228,8 @@ int main() {
                         break;
                     }
                     case 3: {
+                        clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("MUON SACH");
                         dsSach.indssach();
                         string masach;
@@ -1225,6 +1246,8 @@ int main() {
                         break;
                     }
                     case 4: {
+                        clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("TRA SACH");
                         string ma;
                         cout << "Nhap ma sach can tra(nhap 0 de quay ve) :";
@@ -1251,6 +1274,7 @@ int main() {
                         break;
                     case 7: {
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         drawHeader("CAP NHAT THONG TIN CA NHAN");
                         string ten, gioitinh;
                         int tuoi;
@@ -1270,6 +1294,7 @@ int main() {
                     }
                     case 8:
                         clearScreen();
+                        drawTHUVIEN_Banner();
                         doiMk(taikhoanHienTai, dstk, sotk);
                         pauseScreen();
                         break;
