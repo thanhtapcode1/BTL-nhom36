@@ -112,6 +112,10 @@ void listSach::themsachbatkids(sach s, int pos) {
     a->next = p;
 }
 void listSach::indssach() {
+    if (head == NULL) {
+        notifyError("Day sach sach rong ");
+        return;
+    }
     drawSachHeader();
     nodeSach* p = head;
     int stt = 1;
@@ -277,19 +281,26 @@ nodeDg* listDg::timtheoID(string id) {
     return NULL;
 }
 string listDg::taoIDtudong() {
-    int dem = 0;
-    for (nodeDg* p = head; p != NULL; p = p->next) {
-        dem++;  // dem so doc gia hien co
+    int i = 1;
+    while (true) {
+        string id = "DG";
+        if (i < 10)
+            id += "00" + to_string(i);
+        else if (i < 100)
+            id += "0" + to_string(i);
+        else
+            id += to_string(i);
+
+        bool tonTai = false;
+        for (nodeDg* p = head; p != NULL; p = p->next) {
+            if (p->data.madg == id) {
+                tonTai = true;
+                break;
+            }
+        }
+        if (tonTai == false) return id;  // nếu chưa tồn tại thì dùng ID này
+        i++;
     }
-    int nextNum = dem + 1;  // doc gia ke tiep
-    string id = "DG";
-    if (nextNum < 10)
-        id += "00" + to_string(nextNum);
-    else if (nextNum < 100)
-        id += "0" + to_string(nextNum);
-    else
-        id += to_string(nextNum);
-    return id;
 }
 void listDg::xoadgID(string id) {
     nodeDg* p = head;
@@ -329,6 +340,10 @@ void listDg::capnhattt(string madg, string ten, int tuoi, string gioitinh) {
     notifySuccess("Cap nhat thong tin thanh cong");
 }
 void listDg::inDsdg() {
+    if (head == NULL) {
+        notifyError("Danh sach doc gia rong");
+        return;
+    }
     drawDGHeader();
     int stt = 1;
     nodeDg* p = head;
@@ -579,10 +594,15 @@ bool dangnhap(taikhoan dstk[], int soTk, string user, string pass, taikhoan& tkH
     }
     return false;
 }
+string nhapChuoi() {
+    string s;
+    getline(cin >> ws, s);
+    return s;
+}
 void taoTaiKhoan(taikhoan dstk[], int& soTk, listDg& Dsdocgia, int& sotkUser) {
     taikhoan tk;
     cout << "Nhap ten dang nhap: ";
-    cin >> tk.username;
+    tk.username = nhapChuoi();
     for (int i = 0; i < soTk; i++) {
         if (dstk[i].username == tk.username) {
             notifyError("Ten dang nhap da ton tai");
@@ -590,7 +610,7 @@ void taoTaiKhoan(taikhoan dstk[], int& soTk, listDg& Dsdocgia, int& sotkUser) {
         }
     }
     cout << "Nhap mat khau: ";
-    cin >> tk.pasword;
+    tk.pasword = nhapChuoi();
     string vaitro;
     while (true) {
         cout << "Nhap vai tro (admin/user): ";
@@ -663,11 +683,7 @@ int nhapSoNguyen() {
         cin.ignore(1000, '\n');
     }
 }
-string nhapChuoi() {
-    string s;
-    getline(cin >> ws, s);
-    return s;
-}
+
 void nhapSach(sach& a) {
     cout << "Nhap ma sach:";
     a.masach = nhapChuoi();
@@ -855,7 +871,6 @@ int main() {
     hieuungloading();
     loadingEffect();
     cout << "Tai du lieu thanh cong .";
-    pauseScreen();
     while (true) {
         vector<string> menuLogin = {
             "1. Dang nhap",
