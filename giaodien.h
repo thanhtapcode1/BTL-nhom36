@@ -1,7 +1,8 @@
 #pragma once
 #include <limits.h>
+#define byte WindowsByte
 #include <windows.h>
-
+#undef byte
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -20,7 +21,6 @@ inline void resetColor() {
 inline void clearScreen() {
     system("cls");
 }
-
 // ====== TITLE (CĂN GIỮA) ======
 inline void drawTitle(const string& title, int width = 50) {
     int padLeft = (width - (int)title.length()) / 2;
@@ -140,7 +140,7 @@ inline void pauseScreen() {
 }
 inline void hieuungloading() {
     for (int i = 0; i <= 100; i += 5) {  // them vao cho dep
-        cout << "\rDang tai... " << i << "%";
+        cout << MAGENTA << "\rDang tai... " << i << "%";
         Sleep(50);
     }
 }
