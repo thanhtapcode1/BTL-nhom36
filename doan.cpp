@@ -946,20 +946,21 @@ int main() {
                             break;
                         }
                         sach a;
-                        nhapSach(a);
                         if (dsSach.tonTaiMaSach(a.masach)) {
                             notifyError("Ma sach da ton tai khong the them!");
                             pauseScreen();
                             break;
                         }
-                        if (lcthem == 1)
+                        if (lcthem == 1) {
+                            nhapSach(a);
                             dsSach.themsachdauds(a);
-
-                        else if (lcthem == 2)
+                        } else if (lcthem == 2) {
+                            nhapSach(a);
                             dsSach.themsachcuoids(a);
-                        else if (lcthem == 3) {
+                        } else if (lcthem == 3) {
                             int pos;
                             cout << "Nhap vi tri muon them :";
+                            nhapSach(a);
                             pos = nhapSoNguyen();
                             dsSach.themsachbatkids(a, pos);
                         }
