@@ -271,19 +271,26 @@ nodeDg* listDg::timtheoID(string id) {
     return NULL;
 }
 string listDg::taoIDtudong() {
-    int dem = 0;
-    for (nodeDg* p = head; p != NULL; p = p->next) {
-        dem++;  // dem so doc gia hien co
+    int i = 1;
+    while (true) {
+        string id = "DG";
+        if (i < 10)
+            id += "00" + to_string(i);
+        else if (i < 100)
+            id += "0" + to_string(i);
+        else
+            id += to_string(i);
+
+        bool tonTai = false;
+        for (nodeDg* p = head; p != NULL; p = p->next) {
+            if (p->data.madg == id) {
+                tonTai = true;
+                break;
+            }
+        }
+        if (tonTai == false) return id;  // nếu chưa tồn tại thì dùng ID này
+        i++;
     }
-    int nextNum = dem + 1;  // doc gia ke tiep
-    string id = "DG";
-    if (nextNum < 10)
-        id += "00" + to_string(nextNum);
-    else if (nextNum < 100)
-        id += "0" + to_string(nextNum);
-    else
-        id += to_string(nextNum);
-    return id;
 }
 void listDg::xoadgID(string id) {
     nodeDg* p = head;
@@ -369,7 +376,6 @@ class listMuontra {
    public:
     vector<muontra> dsmt;
     bool kiemtraSachDangMuonID(string maSach);
-    bool kiemtraSachDangMuonTen(string tenSach);
     bool kiemtraMuonSachIDDG(string id);
     void muonSach(string masach, string madg, nodeSach* a);
     void traSach(string madg, nodeSach* a);
@@ -383,14 +389,6 @@ class listMuontra {
 bool listMuontra::kiemtraSachDangMuonID(string maSach) {
     for (auto& mt : dsmt) {
         if (mt.masach == maSach && mt.trangthai == "Dang muon") {
-            return true;  // Có người đang mượn
-        }
-    }
-    return false;
-}
-bool listMuontra::kiemtraSachDangMuonTen(string tenSach) {
-    for (auto& mt : dsmt) {
-        if (mt.tensach == tenSach && mt.trangthai == "Dang muon") {
             return true;  // Có người đang mượn
         }
     }

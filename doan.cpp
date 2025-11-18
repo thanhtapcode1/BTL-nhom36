@@ -42,6 +42,8 @@ class listSach {
     void inSachDaTimID(string masach);
     nodeSach* getHead();
     bool tonTaiMaSach(string ma);
+    void sapXepSachTheoTen();
+    void sapXepSachTheoMa();
 };
 //------------------ Cai dat ham list Sach--------------------------------------
 listSach::listSach() {
@@ -219,6 +221,33 @@ void listSach::timSachgandung(string tensach) {
         cout << "Khong tim thay sach nao phu hop!\n";
     }
 }
+void listSach::sapXepSachTheoTen() {
+    if (head == NULL || head->next == NULL) return;
+    for (nodeSach* p = head; p->next != NULL; p = p->next) {
+        for (nodeSach* q = head; q->next != NULL; q = q->next) {
+            string ten1 = q->data.tensach;
+            string ten2 = q->next->data.tensach;
+            // So sánh không phân biệt hoa thường
+            for (auto& c : ten1) c = tolower(c);
+            for (auto& c : ten2) c = tolower(c);
+
+            if (ten1 > ten2) {
+                swap(q->data, q->next->data);
+            }
+        }
+    }
+}
+void listSach::sapXepSachTheoMa() {
+    if (head == NULL || head->next == NULL) return;
+    for (nodeSach* p = head; p->next != NULL; p = p->next) {
+        for (nodeSach* q = head; q->next != NULL; q = q->next) {
+            if (q->data.masach > q->next->data.masach) {
+                swap(q->data, q->next->data);
+            }
+        }
+    }
+}
+
 //===================== Doc Gia=================================================
 struct docGia {
     string madg;
@@ -247,6 +276,8 @@ class listDg {
     void inDsdg();
     void in1DG(string madg);
     void capnhattt(string madg, string ten, int tuoi, string gioitinh);
+    void sapXepDgTheoTen();
+    void sapXepDgTheoID();
 };
 //------------------ Cai dac ham doc gia--------------------------------------
 listDg ::listDg() {
@@ -332,12 +363,14 @@ void listDg::capnhattt(string madg, string ten, int tuoi, string gioitinh) {
     nodeDg* p = timtheoID(madg);
     if (!p) {
         notifyError("Khong tim thay doc gia!");
+        pauseScreen();
         return;
     }
     p->data.ten = ten;
     p->data.tuoi = tuoi;
     p->data.gioitinh = gioitinh;
     notifySuccess("Cap nhat thong tin thanh cong");
+    pauseScreen();
 }
 void listDg::inDsdg() {
     if (head == NULL) {
@@ -386,6 +419,31 @@ void listDg::in1DG(string ma) {
     setColor(11);
     cout << "===============================================================================\n";
     resetColor();
+}
+void listDg::sapXepDgTheoTen() {
+    if (head == NULL || head->next == NULL) return;
+    for (nodeDg* p = head; p->next != NULL; p = p->next) {
+        for (nodeDg* q = head; q->next != NULL; q = q->next) {
+            string ten1 = q->data.ten;
+            string ten2 = q->next->data.ten;
+            // chuyen ve chu thuong
+            for (auto& c : ten1) c = tolower(c);
+            for (auto& c : ten2) c = tolower(c);
+            if (ten1 > ten2) {
+                swap(q->data, q->next->data);
+            }
+        }
+    }
+}
+void listDg::sapXepDgTheoID() {
+    if (head == NULL || head->next == NULL) return;
+    for (nodeDg* p = head; p->next != NULL; p = p->next) {
+        for (nodeDg* q = head; q->next != NULL; q = q->next) {
+            if (q->data.madg > q->next->data.madg) {
+                swap(q->data, q->next->data);
+            }
+        }
+    }
 }
 //=================Muon tra sach=======================================================
 struct muontra {
@@ -568,7 +626,6 @@ void listMuontra::duyetYC(string madg, string masach, nodeSach* a) {
         if (x.madg == madg && x.masach == masach && x.trangthai == "Cho duyet") {
             x.trangthai = "Dang muon";
             a->data.soluong--;
-            cout << "Duyet thanh cong.\n";
             flag = true;
             return;
         }
@@ -644,6 +701,8 @@ void doiMk(taikhoan& tkhientai, taikhoan dstk[], int sotk) {
     cin >> mkCu;
     if (mkCu != tkhientai.pasword) {
         notifyError("Mat khau khong dung");
+        cin.ignore();
+        pauseScreen();
         return;
     }
     cout << "Nhap mat khau moi :";
@@ -658,6 +717,8 @@ void doiMk(taikhoan& tkhientai, taikhoan dstk[], int sotk) {
         }
     }
     notifySuccess("Doi mat khau thanh cong");
+    cin.ignore();
+    pauseScreen();
 }
 void xoataikhoan(taikhoan dstk[], int& sotk, string madg) {
     int vitri = -1;
@@ -675,12 +736,30 @@ void xoataikhoan(taikhoan dstk[], int& sotk, string madg) {
 }
 //==================================Ham Phu==============================================
 int nhapSoNguyen() {
-    int x;
+    string s;
     while (true) {
-        if (cin >> x) return x;
-        cout << "Sai dinh dang! Vui long nhap lai: ";
-        cin.clear();
-        cin.ignore(1000, '\n');
+        getline(cin, s);
+        // Nếu chỉ bấm Enter → hỏi lại nhưng KHÔNG báo lỗi
+        if (s.empty()) {
+            continue;
+        }
+        // Thử chuyển thành số
+        bool ok = true;
+        for (char c : s) {
+            if (!isdigit(c) && c != '-' && c != '+') {
+                ok = false;
+                break;
+            }
+        }
+        if (!ok) {
+            cout << "→ Sai dinh dang! Nhap lai: ";
+            continue;
+        }
+        try {
+            return stoi(s);
+        } catch (...) {
+            cout << "→ Sai dinh dang! Nhap lai: ";
+        }
     }
 }
 
@@ -870,7 +949,8 @@ int main() {
     drawTHUVIEN_Banner();
     hieuungloading();
     loadingEffect();
-    cout << "Tai du lieu thanh cong .";
+    notifySuccess("Tai du lieu thanh cong");
+    pauseScreen();
     while (true) {
         vector<string> menuLogin = {
             "1. Dang nhap",
@@ -880,7 +960,13 @@ int main() {
         drawTHUVIEN_Banner();
         drawMenuBox(menuLogin, "DANG NHAP HE THONG");
         int lcdn;
-        lcdn = nhapSoNguyen();
+        while (true) {
+            lcdn = nhapSoNguyen();
+            if (lcdn >= 0 && lcdn <= 3) {
+                break;
+            }
+            notifyError("Lua chon khong hop le.Vui long nhap lai (0-3)");
+        }
         if (lcdn == 1) {  // dang nhap
             clearScreen();
             drawTHUVIEN_Banner();
@@ -893,9 +979,11 @@ int main() {
             if (dangnhap(dstk, sotk, user, pass, taikhoanHienTai)) {
                 daDangNhap = true;
                 notifySuccess("Dang nhap thanh cong");
+                cin.ignore();
                 pauseScreen();
             } else {
-                notifyError("Dang nhap that bai");
+                notifyError("Dang nhap that bai.Sai tai khoan hoac mat khau");
+                cin.ignore();
                 pauseScreen();
             }
         } else if (lcdn == 2) {  // dang ky tk
@@ -904,6 +992,7 @@ int main() {
             drawHeader("Dang ky tai khoan");
             taoTaiKhoan(dstk, sotk, dsDg, sotkUser);
             luudsdocgia(dsDg);
+            cin.ignore();
             pauseScreen();
         } else if (lcdn == 3) {  // thoat
             return 0;
@@ -917,9 +1006,11 @@ int main() {
                     "4. Tim sach",
                     "5. Them so luong sach",
                     "6. Duyet yeu cau",
-                    "7. Hien thi du lieu",
-                    "8. Doi mat khau",
-                    "9. Dang xuat"};
+                    "7. Sap xep doc gia",
+                    "8. Sap xep sach",
+                    "9. Hien thi du lieu",
+                    "10. Doi mat khau",
+                    "11. Dang xuat"};
                 clearScreen();
                 drawTHUVIEN_Banner();
                 drawMenuBox(menuAd, "ADMIN MENU");
@@ -946,26 +1037,37 @@ int main() {
                             break;
                         }
                         sach a;
-                        if (dsSach.tonTaiMaSach(a.masach)) {
-                            notifyError("Ma sach da ton tai khong the them!");
-                            pauseScreen();
-                            break;
-                        }
                         if (lcthem == 1) {
                             nhapSach(a);
+                            if (dsSach.tonTaiMaSach(a.masach)) {
+                                notifyError("Ma sach da ton tai khong the them!");
+                                pauseScreen();
+                                break;
+                            }
                             dsSach.themsachdauds(a);
                         } else if (lcthem == 2) {
                             nhapSach(a);
+                            if (dsSach.tonTaiMaSach(a.masach)) {
+                                notifyError("Ma sach da ton tai khong the them!");
+                                pauseScreen();
+                                break;
+                            }
                             dsSach.themsachcuoids(a);
                         } else if (lcthem == 3) {
                             int pos;
                             cout << "Nhap vi tri muon them :";
-                            nhapSach(a);
                             pos = nhapSoNguyen();
+                            nhapSach(a);
+                            if (dsSach.tonTaiMaSach(a.masach)) {
+                                notifyError("Ma sach da ton tai khong the them!");
+                                pauseScreen();
+                                break;
+                            }
                             dsSach.themsachbatkids(a, pos);
                         }
                         luuDSSach(dsSach);
-                        cout << "Them sach thanh cong.";
+                        notifySuccess("Them sach thanh cong");
+                        pauseScreen();
                         break;
                     }
                     case 2: {
@@ -1043,8 +1145,7 @@ int main() {
                         dsDg.inDsdg();
                         cout << "\n";
                         cout << "Nhap ID doc gia (nhap 0 de quay lai):";
-                        string id;
-                        cin >> id;
+                        string id = nhapChuoi();
                         if (id == "0") {
                             break;
                         }
@@ -1147,6 +1248,60 @@ int main() {
                     case 7: {
                         clearScreen();
                         drawTHUVIEN_Banner();
+                        drawSubMenu("SAP XEP DOC GIA", {"Quay ve", "Sap xep theo ma", "Sap xep theo ten"});
+                        int lcsx;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            lcsx = nhapSoNguyen();
+                            if (lcsx >= 0 && lcsx <= 2) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-2)");
+                        }
+                        if (lcsx == 1) {
+                            dsDg.sapXepDgTheoID();
+                            dsDg.inDsdg();
+                            notifySuccess("Danh sach doc gia da duoc sap xep theo MA");
+                            pauseScreen();
+                        }
+                        if (lcsx == 2) {
+                            dsDg.sapXepDgTheoTen();
+                            dsDg.inDsdg();
+                            notifySuccess("Danh sach doc gia da duoc sap xep theo TEN");
+                            pauseScreen();
+                        }
+                        break;
+                    }
+                    case 8: {
+                        clearScreen();
+                        drawTHUVIEN_Banner();
+                        drawSubMenu("SAP XEP SACH", {"Quay ve", "Sap xep theo ma", "Sap xep theo ten"});
+                        int lcsx1;
+                        while (true) {
+                            cout << "→ Nhap lua chon: ";
+                            lcsx1 = nhapSoNguyen();
+                            if (lcsx1 >= 0 && lcsx1 <= 2) {
+                                break;
+                            }
+                            notifyError("Lua chon khong hop le.Vui long nhap lai (0-2)");
+                        }
+                        if (lcsx1 == 1) {
+                            dsSach.sapXepSachTheoMa();
+                            dsSach.indssach();
+                            notifySuccess("Danh sach Sach da duoc sap xep theo MA");
+                            pauseScreen();
+                        }
+                        if (lcsx1 == 2) {
+                            dsSach.sapXepSachTheoTen();
+                            dsSach.indssach();
+                            notifySuccess("Danh sach Sach da duoc sap xep theo TEN");
+                            pauseScreen();
+                        }
+                        break;
+                    }
+                    case 9: {
+                        clearScreen();
+                        drawTHUVIEN_Banner();
                         drawSubMenu("HIEN THI DU LIEU", {"Quay ve", "Xem danh sach sach", "Xem danh sach doc gia", "Xem lich su muon"});
                         int abc;
                         while (true) {
@@ -1172,14 +1327,13 @@ int main() {
                         }
                         break;
                     }
-                    case 8: {
+                    case 10: {
                         clearScreen();
                         drawTHUVIEN_Banner();
                         doiMk(taikhoanHienTai, dstk, sotk);
-                        pauseScreen();
                         break;
                     }
-                    case 9: {
+                    case 11: {
                         notifyError("Da dang xuat");
                         daDangNhap = false;
                         pauseScreen();
@@ -1255,6 +1409,7 @@ int main() {
                         }
                         nodeSach* p = dsSach.timSachTheoMa(masach);
                         dsmuon.muonSach(masach, taikhoanHienTai.madg, p);
+                        cin.ignore();
                         pauseScreen();
                         luuDSMuon(dsmuon);
                         luuDSSach(dsSach);
@@ -1298,12 +1453,24 @@ int main() {
                         if (ten == "0") {
                             break;
                         }
-                        cout << "Nhap tuoi :";
-                        tuoi = nhapSoNguyen();
-                        cout << "Nhap gioi tinh :";
-                        cin >> gioitinh;
+
+                        while (true) {
+                            cout << "Nhap tuoi:";
+                            tuoi = nhapSoNguyen();
+                            if (tuoi <= 100) {
+                                break;
+                            }
+                            notifyError("Khong hop le.Vui long nhap lai");
+                        }
+                        while (true) {
+                            cout << "Nhap gioi tinh:";
+                            gioitinh = nhapChuoi();
+                            if ((gioitinh == "Nam") || (gioitinh == "nam") || (gioitinh == "Nu") || (gioitinh == "nu")) {
+                                break;
+                            }
+                            notifyError("Khong hop le.Vui long nhap lai");
+                        }
                         dsDg.capnhattt(taikhoanHienTai.madg, ten, tuoi, gioitinh);
-                        pauseScreen();
                         luudsdocgia(dsDg);
                         break;
                     }
@@ -1311,7 +1478,6 @@ int main() {
                         clearScreen();
                         drawTHUVIEN_Banner();
                         doiMk(taikhoanHienTai, dstk, sotk);
-                        pauseScreen();
                         break;
                     case 9:
                         notifySuccess("Da dang xuat");

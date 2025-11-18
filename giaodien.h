@@ -132,11 +132,9 @@ inline void drawListHeader(const string& title) {
     cout << "\n=== " << title << " ===\n\n";
     resetColor();
 }
-inline void pauseScreen() {
-    cout << "\nNhan Enter de tiep tuc...";
-    cin.clear();
-    cin.sync();  // xoá toàn bộ ký tự còn trong buffer
-    cin.get();   // chờ Enter thật
+void pauseScreen() {
+    cout << "Nhan Enter de tiep tuc...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 inline void hieuungloading() {
     for (int i = 0; i <= 100; i += 5) {  // them vao cho dep
