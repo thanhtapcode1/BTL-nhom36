@@ -202,7 +202,7 @@ void listSach::inSachDaTimID(string masach) {
         return;
     }
     notifySuccess("Tim thay sach");
-    cout << "Masach:" << p->data.masach << " | Ten:" << p->data.tensach << " | TacGia:" << p->data.tacgia << " | SL:" << p->data.soluong;
+    cout << "Masach:" << p->data.masach << " | Ten:" << p->data.tensach << " | TacGia:" << p->data.tacgia << " | SL:" << p->data.soluong << endl;
 }
 void listSach::timSachgandung(string tensach) {
     string maChuThuong = tensach;
@@ -1196,6 +1196,7 @@ int main() {
                             string masach;
                             cin >> masach;
                             dsSach.inSachDaTimID(masach);
+                            cin.ignore();
                             pauseScreen();
                         } else if (lctim == 2) {
                             cout << "Nhap ten sach can tim:";
@@ -1394,6 +1395,7 @@ int main() {
                             string masach;
                             cin >> masach;
                             dsSach.inSachDaTimID(masach);
+                            cin.ignore();
                             pauseScreen();
                         } else if (lctim == 2) {
                             cout << "Nhap ten sach can tim:";
