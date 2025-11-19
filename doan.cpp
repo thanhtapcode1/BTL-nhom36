@@ -214,7 +214,7 @@ void listSach::timSachgandung(string tensach) {
         if (tenLower.find(maChuThuong) != string::npos) {
             flag = true;
             cout << "\nTim thay sach: ";
-            cout << p->data.masach << " | " << p->data.tensach << " | Tac gia: " << p->data.tacgia << " | SL: " << p->data.soluong;
+            cout << p->data.masach << " | " << p->data.tensach << " | Tac gia: " << p->data.tacgia << " | SL: " << p->data.soluong << endl;
         }
     }
     if (!flag) {
@@ -1055,8 +1055,15 @@ int main() {
                             dsSach.themsachcuoids(a);
                         } else if (lcthem == 3) {
                             int pos;
-                            cout << "Nhap vi tri muon them :";
-                            pos = nhapSoNguyen();
+                            while (true) {
+                                cout << "Nhap vi tri muon them :";
+                                pos = nhapSoNguyen();
+                                if (pos <= dsSach.soluongsach() + 1) {
+                                    break;
+                                }
+                                notifyError("Khong hop le!");
+                            }
+
                             nhapSach(a);
                             if (dsSach.tonTaiMaSach(a.masach)) {
                                 notifyError("Ma sach da ton tai khong the them!");
